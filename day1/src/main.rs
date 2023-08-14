@@ -60,3 +60,24 @@ fn main() {
         eprintln!("Error reading file");
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn day1_test() {
+        if let Ok(sums) = read_and_accumulate_numbers("./day1_test.txt") {
+            let expected_result: Vec<HashMap<i32, i32>> = [
+                HashMap::from([(4000, 4000)]),
+                HashMap::from([(3000, 6000)]),
+                HashMap::from([(10000, 10000)]),
+                HashMap::from([(6000, 11000)]),
+                HashMap::from([(9000, 24000)]),
+            ]
+            .to_vec();
+            assert_eq!(sums, expected_result);
+        }
+        let result = 2 + 2;
+        assert_eq!(result, 4);
+    }
+}
