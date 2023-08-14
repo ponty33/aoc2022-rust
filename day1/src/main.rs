@@ -64,20 +64,27 @@ fn main() {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::fs::File;
+    use std::io::Write;
+    use tempfile::NamedTempFile;
+
     #[test]
-    fn day1_test() {
-        if let Ok(sums) = read_and_accumulate_numbers("./day1_test.txt") {
-            let expected_result: Vec<HashMap<i32, i32>> = [
-                HashMap::from([(4000, 4000)]),
-                HashMap::from([(3000, 6000)]),
-                HashMap::from([(10000, 10000)]),
-                HashMap::from([(6000, 11000)]),
-                HashMap::from([(9000, 24000)]),
-            ]
-            .to_vec();
-            assert_eq!(sums, expected_result);
-        }
-        let result = 2 + 2;
-        assert_eq!(result, 4);
+    fn test_read_and_accumulate_numbers() {
+        let content = "1000\n2000\n3000\n\n4000\n\n5000\n6000\n\n7000\n8000\n9000\n\n10000";
+        let temp_file = NamedTempFile::new().expect("Failed to create temp file");
+        let temp_path = temp_file.path().to_str().expect("Invalid temp path");
+
+        let mut file = File::create(temp_path).expect("Failed to create file");
+        file.write_all(content.as_bytes())
+            .expect("Failed to write content");
+
+        let expected_result: Vec<HashMap<i32, i32>> = vec![
+            [(4000, 4000)].iter().cloned().collect(),
+            [(3000, 6000)].iter().cloned().collect(),
+            [(6000, 11000)].iter().cloned().collect(),
+            [(9000, 24000)].iter().cloned().collect(),
+        ];
+        let result = read_and_accumulate_numbers(temp_path).unwrap();
+        assert_eq!(result, expected_result);
     }
 }
